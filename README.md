@@ -61,6 +61,12 @@ Notes on Solidity & EVM taken while doing https://cryptozombies.io/en/course/
     - [Past events](#past-events)
     - [Events as storage!](#events-as-storage)
 - [On-chain vs Off-chain](#on-chain-vs-off-chain)
+- [MEV](#mev)
+- [AMM](#amm)
+  - [Order book Model](#order-book-model)
+  - [Automated Market Maker](#automated-market-maker)
+    - [Routing](#routing)
+  - [Taker and Maker](#taker-and-maker)
 
 
 
@@ -618,5 +624,90 @@ Transactions:
 Data
 - On chain: transactions data that is inside the blockchain Blocks / Addresses / etc
 - Off chain: real world data. External to the blockchain.
+
+
+# MEV
+
+[link](https://chainstack.com/what-is-mev-and-how-does-solana-solves-its-mev-issues/#:~:text=MEV%2C%20or%20%E2%80%9Cmaximal%20extractable%20value,transaction%20ordering%20on%20the%20chain.)
+
+- Maximum extracted value (ethereum): Refers to the amount of value miners win from the transactions that they add to the next block. The higher the gas the more likely its been to add it.
+
+- Problems of MEV: 
+  - **Frontrunning**. 
+    - I see somebody is trying to do an arbitrage getting 5% for free. I can copy same transaction and place it with higher gas fee into the transaction pool. (This will make mine being added.)
+    - I am a miner and I see somebody trying to buy something I can force my transaction to be added instead. 
+
+> Solana has a standardized gas fee, which means searchers can’t front-run or back-run any transaction. (We will talk about front-running and back-running later).
+
+Types of MEV techniques 
+- [Sandwich](https://eigenphi-1.gitbook.io/classroom/mev-types/sandwich-mev)
+- front-running
+- back-running
+
+
+# AMM
+
+## Order book Model
+
+To understand AMM we need to understand order book model.
+
+Traditional exchanges work with the model of order book. Order book is divided on the ask and bid columns and they represent.
+- ASK: How much value the people is willing to sell their asseet for.
+- BID: How much value the people is willing to pay for that asset.
+
+In every **order book** we have 2 assets `Base and quote`.
+ETH-USD
+- You can buy ETH and sell USD.
+- You can sell ETH and buy USD.
+
+As you can see the pair ETH-USD is the same as USD-ETH in terms of the operations you can do. However the price of the pair is represented `quote-base`. So ETH-USD is basically giving price of ETH respect to USD.
+
+Orders you can set:
+- Limit order: -> Add order to the order book.
+- Market order: -> Going on the other side of the order book and buy OR sell.
+- ...
+
+This is how centralize exchanges mostly work.
+
+## Automated Market Maker
+
+They use an algorithm to determine the price. `Constant Product Automated market maker`.
+
+This algorithm sets the price which you can sell by maintaining a ratio between 2 assets creating like this a PAIR.
+
+```
+Asset X
+Asset Y
+
+`X * Y = K`
+
+The algorithm will assure that K is always constant.
+```
+
+If you want to give asset X and take asset Y. You will do the following. I will give X amount of tokens and the pool will calculate the Y amount of tokens that you will receive. How to calculate it?
+
+```
+(X + x_give) * (Y - y_receive) = K
+y_receive = Y - K / (X + x_give)
+```
+We know all except **y_receive**.
+
+If we give 5 Xs should we receive 5 Ys? No. The algorithm will try to maintain K. However as you can see the more liquidity the higher the change you would have get 5Xs-5Ys. This is a problem for Big trades since they will not get a good average price.
+
+The liquidity pool is happy it maintains the K, however we see that now the ratio of tokens is not 50:50 anymore. Now we have more X than Y. "That means that Y is more expensive than X".
+
+Every transacton on the AMM will try to maintain this ratio.
+
+Also, with every transaction you do through AMM you pay a fee that will go to the **liquidity providers**. This incentives people to put liquidity on the fund but this is benefitial because the more liquidity the better is the price. More money more stable price.
+
+### Routing
+
+Even if the Liquidity pair is not given directly. Some AMM can concatenate different liquidity pools doing several transactions over them to give liquidity of that specific token.
+
+## Taker and Maker
+
+Every transaction instead of Bid and Ask is also called Taker and Maker assets. 
+- Asset you take => Taker => This will become more expensive.
+- Asset you give => Maker => This will become cheaper.
 
 
