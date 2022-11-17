@@ -61,12 +61,22 @@ Notes on Solidity & EVM taken while doing https://cryptozombies.io/en/course/
     - [Past events](#past-events)
     - [Events as storage!](#events-as-storage)
 - [On-chain vs Off-chain](#on-chain-vs-off-chain)
+- [Mempool](#mempool)
 - [MEV](#mev)
+  - [MEV Attack](#mev-attack)
+    - [How are they done?](#how-are-they-done)
+  - [Arbbot](#arbbot)
 - [AMM](#amm)
   - [Order book Model](#order-book-model)
   - [Automated Market Maker](#automated-market-maker)
     - [Routing](#routing)
   - [Taker and Maker](#taker-and-maker)
+- [Flashbots](#flashbots)
+  - [Intro](#intro)
+  - [Features](#features)
+  - [Benefits](#benefits)
+- [RPC](#rpc)
+  - [Conventions](#conventions)
 
 
 
@@ -625,25 +635,66 @@ Data
 - On chain: transactions data that is inside the blockchain Blocks / Addresses / etc
 - Off chain: real world data. External to the blockchain.
 
+# Mempool
+
+Ethereum adds a new block every 12seconds. All transactions that are being created they are broadcast to the mempool where they remain pending until miners pick them and add to the block.
+The highest gas fee the more likely to be added to next block. (It's the miner decission)
+Miners will try to maximize profits so they will get the most expensive gas transactions.
+
+Amazing website that helps visualize it -> https://txstreet.com/v/eth-btc 
+
+Note:
+If the gas price is too low, the transaction may wait too long in the mempool.
+Therefore, a restriction is in place that invalidates the transaction after 5 minutes from the moment of creation OR if more than 35 blocks have been created since the transaction was created.
+
 
 # MEV
+[MEV EigenPhi Classroom](https://eigenphi-1.gitbook.io/classroom/)
+[How does solana solve MEV](https://chainstack.com/what-is-mev-and-how-does-solana-solves-its-mev-issues/#:~:text=MEV%2C%20or%20%E2%80%9Cmaximal%20extractable%20value,transaction%20ordering%20on%20the%20chain.)
 
-[link](https://chainstack.com/what-is-mev-and-how-does-solana-solves-its-mev-issues/#:~:text=MEV%2C%20or%20%E2%80%9Cmaximal%20extractable%20value,transaction%20ordering%20on%20the%20chain.)
 
-- Maximum extracted value (ethereum): Refers to the amount of value miners win from the transactions that they add to the next block. The higher the gas the more likely its been to add it.
+Conceptualized in the following paper from Cornell Tech university. [Flash boys 2.0](https://arxiv.org/abs/1904.05234)
 
-- Problems of MEV: 
-  - **Frontrunning**. 
-    - I see somebody is trying to do an arbitrage getting 5% for free. I can copy same transaction and place it with higher gas fee into the transaction pool. (This will make mine being added.)
-    - I am a miner and I see somebody trying to buy something I can force my transaction to be added instead. 
+Maximal extractable value (MEV) refers to the maximum value that can be extracted from block production more than the standard block reward and gas fees by including, excluding, and changing the order of transactions in a block.
+
+How to change order on transactions? Gas fee. Higher gas transactions go first.
+
+- Problems of MEV? Being the victim of a MEV Attack.
+## MEV Attack
+
+- **Sandwich MEV** [link](https://eigenphi-1.gitbook.io/classroom/mev-types/sandwich-mev)
+
+![](sandwich.png)
+
+- **Frontrunning**: is an attack where the third party attempts to intercept a large transaction 
+  - I see somebody is trying to do an arbitrage getting 5% for free. I can copy same transaction and place it with higher gas fee into the transaction pool. (This will make mine being added.)
+  - I am a miner and I see somebody trying to buy something I can force my transaction to be added instead.
+  - Frontrunning (also known as Priority Gas Auctions (PGAs)): Transaction A is broadcasted with a higher gas price than an already pending transaction B so that A gets mined before B.
+- **Back running**.
+  - Backrunning: Transaction A is broadcasted with a slightly lower gas price than already pending transaction B so that A gets mined right after B in the same block.
+
 
 > Solana has a standardized gas fee, which means searchers can’t front-run or back-run any transaction. (We will talk about front-running and back-running later).
 
-Types of MEV techniques 
-- [Sandwich](https://eigenphi-1.gitbook.io/classroom/mev-types/sandwich-mev)
-- front-running
-- back-running
+### How are they done?
 
+- **MEV Contracts** are smart contracts that execute MEV strategies.
+
+
+## Arbbot
+
+Arbitrage bots (searchers) that are looking for opportunities in the mempool to take advantage from. Once they see an opportunity they try to Sandwich the transaction victim.
+However, later another bot might see same opportunity and do same transaction but with higher gas so it is being added first.
+
+**Who wins**? The first one which will be the one paying the higher gas.
+
+As the ecosystem comes more competitive the possible return on an opportunity decreases.
+
+**Who wins in reality**? Miners that will get the gas fee which will be approximated equal to the arbitrage opportunity return.
+
+This is call **priority gas auction** PGAs
+
+https://docs.flashbots.net/
 
 # AMM
 
@@ -667,7 +718,7 @@ Orders you can set:
 - Market order: -> Going on the other side of the order book and buy OR sell.
 - ...
 
-This is how centralize exchanges mostly work.
+This is how CEX work and some DEX such as https://oasis.app/#earn
 
 ## Automated Market Maker
 
@@ -711,3 +762,49 @@ Every transaction instead of Bid and Ask is also called Taker and Maker assets.
 - Asset you give => Maker => This will become cheaper.
 
 
+
+# Flashbots
+
+https://docs.flashbots.net/
+
+## Intro
+Flashbots Auction provides a private transaction pool + a sealed bid blockspace auction mechanism which allows block proposers (validators; previously "miners" in PoW) to trustlessly outsource the work of finding optimal block construction.
+
+In the regular Ethereum transaction pool, users broadcast transactions to the public peer-to-peer network and specify a gas price which indicates how much they are willing to pay for each unit of computation on the ethereum chain. Block builders receive these transactions, order them by gas price, and use a greedy algorithm to produce a block which attempts to maximise the value received through transaction fees. This mechanism is a mix between an English auction and an all-pay auction where bidding for blockspace is performed in the open, the top bidder captures the opportunity, and all participants incur a cost.
+
+
+## Features
+Ultimately, the design goals are the following:
+
+- Pre-trade privacy: implies transactions only become publicly known after they have been included in a block. This excludes intermediaries such as relays & block builders.
+- Failed trade privacy: implies losing bids are never included in a block, thus never exposed to the public.
+- Efficiency: implies MEV extraction is performed without causing unnecessary network or chain congestion.
+- Bundle merging: implies it is possible to merge multiple incoming bundles without conflict.
+- Finality protection: implies it is impractical for Flashbots blocks containing Flashbots bundles to be modified once propagated to the network. This would protect against time-bandit chain re-org attacks.
+- Complete privacy: implies intermediaries like relays and validators cannot observe the content of transactions until included on chain.
+- Permissionless: implies there are no trusted intermediaries which can censor transactions.
+
+Technical architecture: https://docs.flashbots.net/flashbots-auction/overview#technical-architecture
+
+
+## Benefits
+
+Flashbots Protect makes it easy for everyday users and developers to use Flashbots for frontrunning protection.
+
+- Frontrunning protection: transactions will not be seen by hungry sandwich bots in the public mempool.
+- No failed transactions: transactions will only be included if it doesn't include any reverts, so users don't pay for failed transactions. Note: transactions could be included in uncled blocks, emitted to the mempool, and then included on-chain.
+- Etherscan integration: users can see the status of their transactions on Etherscan.
+
+
+# RPC
+
+JSON-RPC is a stateless, light-weight remote procedure call (RPC) protocol. It defines several data structures and the rules around their processing. It is transport agnostic in that the concepts can be used within the same process, over sockets, over HTTP, or in many various message passing environments. It uses JSON (RFC 4627) as data format.
+
+Libraries wrap JSON-RPCC to make it easier.
+
+## Conventions
+
+Two key data types get passed over JSON: unformatted byte arrays and quantities. Both are passed with a hex encoding but with different requirements for formatting.
+
+- Quantities encoded as hexadecimal. 0x0, 0x41, ...
+- Unformatted data (byte arrays, account addresses, hashes, bytecode arrays): encode as hex, prefix with "0x", two hex digits per byte.
