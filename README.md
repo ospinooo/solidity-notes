@@ -7,8 +7,10 @@ See README.md for details.
 # Solidity Cheat-sheet
 
 Notes on Solidity & EVM taken while doing https://cryptozombies.io/en/course/
-
 <!-- markdown="1" is required for GitHub Pages to render the TOC properly. -->
+
+<details><summary>Content</summary><p>
+
 - [Solidity Cheat-sheet](#solidity-cheat-sheet)
 - [State variables](#state-variables)
   - [Mapping](#mapping)
@@ -78,7 +80,7 @@ Notes on Solidity & EVM taken while doing https://cryptozombies.io/en/course/
 - [RPC](#rpc)
   - [Conventions](#conventions)
 
-
+</p></details>
 
 # State variables
 ```
