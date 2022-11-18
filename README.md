@@ -83,7 +83,7 @@ Notes on Solidity & EVM taken while doing https://cryptozombies.io/en/course/
 </p></details>
 
 # State variables
-```
+```solidity
 (string | uint | ...) [public | private] <variable_name>
 ```
 
@@ -99,7 +99,7 @@ In Solidity, when you declare a variable public, it automatically creates a publ
 - mapping is a hash / dict
 
 Declare
-```
+```solidity
 mapping(address => uint) <variable_name>
 ```
 
@@ -116,7 +116,7 @@ Address of a contract or a wallet. This is a 20 bytes variable.
 ## `msg` global variable
 
 msg is a global variable (data from the caller of the function)
-```
+```solidity
 msg.sender // address of the caller
 msg.value // amount of wei that is being trasfer to the payable function.
 ```
@@ -127,7 +127,7 @@ msg.value // amount of wei that is being trasfer to the payable function.
 - Hour is 3600.`1 hours`
 - Day is 86400. `1 days`
 
-```
+```solidity
 uint cooldownTime = 1 days; // Compiler will change to seconds
 uint lastUpdated = now;
 uint readyTime = now + cooldownTime;
@@ -160,7 +160,7 @@ However, when we use structs this is not the case anymore. Exists the concept of
 
 # Functions
 
-```
+```solidity
 function <function_name>((string|uint) [memory|callback] <variable_name>, ...) [public|private|external|internal] [view|pure] [returns (<type> <variable_name>), ...]{
     // body
 }
@@ -205,7 +205,7 @@ function <function_name>((string|uint) [memory|callback] <variable_name>, ...) [
 - Send ether to another address from the smart contract. It needs to be `address payable`
 - transfer function. Buys from the seller we send the money to the seller. `seller.transfer(msg.value)`. Decentralized marketplace. 
 
-```
+```solidity
 recipient_of_funds.transfer(amount);
 ```
 
@@ -216,7 +216,7 @@ recipient_of_funds.transfer(amount);
 
 address == bytes20
 string is a chain of bytes
-```
+```solidity
 uint8 cat = 5;
 uint dog = 5;
 uint combinations = uint(cat) * dog;
@@ -225,12 +225,12 @@ uint combinations = uint(cat) * dog;
 # Events
 
 Definition of an event
-```
+```solidity
 event <event_name>(<type> [indexed] <variable_name>, ...)
 ```
 
 Fire an event
-```
+```solidity
 emit <event_mname>(<variable_name>, ...)
 ```
 
@@ -247,7 +247,7 @@ Require help us define conditions to need to be satisfied before continuing with
 - Only the owner of this NFT is allowed to change it. (Ownership)
 - ...
 
-```
+```solidity
 require(<necesary_condition_to_continue>) // if true we continue
 ```
 
@@ -258,7 +258,7 @@ require(<necesary_condition_to_continue>) // if true we continue
 - Use relative imports
 - To have long codebases of Solidity. Standard is one contract per file.
 
-```
+```solidity
 import "./someothercontract.sol";
 ```
 
@@ -274,7 +274,7 @@ Extra: Libraries a piece of code that can be called from any contract without th
 - callData (RAM). Is like memory but for external functions.
 
 Access writable storage from struct or array you need to use storage.
-```sol
+```solidity
 Sandwich storage mySandwich = sandwiches[_index]; // POINTER
 Sandwich memory anotherSandwich = sandwiches[_index + 1]; // COPY
 ```
@@ -300,7 +300,7 @@ Best practices is to implement an ERC `interface` and then define the address of
 - This will enable us to change to any Smart contract that implements this interface.
 - `Allow owner of the contract to update the address!` In case this is needed in the future. (Dont hard code it).
 
-```sol
+```solidity
 // Define the contract
 contract KittyInterface {
   function getKitty(uint256 _id) external view returns (
@@ -359,7 +359,7 @@ What happens if your smart contract uses other contracts? (bugs)
 ## Custom modifiers
 
 Modifiers to only allow special abilities. Giving arguments.
-```
+```solidity
 // Only certain zombies above a specific level.
 modifier aboveLevel(uint _level, uint _zombieId) {
     require(zombies[_zombieId].level >= _level);
@@ -368,7 +368,7 @@ modifier aboveLevel(uint _level, uint _zombieId) {
 ```
 
 Only possible to do this on `YOUR` zombie. The zombie that the `transaction sender` is trying to do something with.
-```
+```solidity
 modifier ownerOf(uint _zombieId) {
     require(msg.sender == zombieToOwner[_zombieId]);
     _;
@@ -409,7 +409,7 @@ They act like currencies.
 - You can only trade them in whole units.
 - Marketplace that trades exchangeable collectibles ERC721 can integrate with every token that is ERC721.
 
-```sol
+```solidity
 contract ERC721 {
   event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
   event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
@@ -430,7 +430,7 @@ new version
 Transfer tokens to 0. Address that nobody has the private key.
 
 # Security Overflow / Underflow
-```
+```solidity
 uint8 number = 255;
 number++;
 // Now number will be 0!
@@ -438,7 +438,7 @@ number++;
 
 To prevent this, OpenZeppelin has created a library called SafeMath
 
-```
+```solidity
 contract {
     using SafeMath for uint256;
     function {
@@ -513,7 +513,7 @@ cryptoZombies = new web3js.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
 `call` is used for view and pure functions. It only runs on the local node, and won't create a transaction on the blockchain
 
-```
+```js
 myContract.methods.myMethod(123).call()
 ```
 
@@ -525,7 +525,7 @@ This requires the use of GAS FEES and the user needs to sign the transaction!
 
 > Note: sending a transaction will require the user to pay gas, and will pop up their Metamask to prompt them to sign a transaction. When we use Metamask as our web3 provider, this all happens automatically when we call send(), and we don't need to do anything special in our code. Pretty cool!
 
-```
+```js
 myContract.methods.myMethod(123).send()
 ```
 
@@ -535,7 +535,7 @@ payable functions!
 
 We need to specify how much to send in wei, not Ether. (10^18 wei in one ether)
 
-```
+```js
 cryptoZombies.methods.levelUp(zombieId).send({ from: userAccount, value: web3.utils.toWei("0.001", "ether") })
 ```
 
@@ -548,7 +548,7 @@ cryptoZombies.methods.levelUp(zombieId).send({ from: userAccount, value: web3.ut
 ## Public state variables
 
 Automatic getters to get the value. 
-```
+```js
 // zombies is a mapping
 cryptoZombies.methods.zombies(id).call()
 ```
@@ -557,7 +557,7 @@ cryptoZombies.methods.zombies(id).call()
 
 Get the active account from the user that is checking the website.
 
-```
+```js
 var userAccount = web3.eth.accounts[0];
 ```
 
@@ -585,11 +585,11 @@ Using indexed keyword in the event definition.
 > Up to 3 parameters can be indexed
 
 For example only get the transfer made to me.
-```
+```solidity
 event Transfer(address indexed _from, address indexed _to, uint256 _tokenId);
 ```
 Use `filter` to only fire this code when `_to` equals `userAccount`
-```
+```js
 cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
     .on("data", function(event) {
     let data = event.returnValues;
@@ -602,7 +602,7 @@ cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
 ### Past events
 
 We can even query past events using getPastEvents, and use the filters fromBlock and toBlock to give Solidity a time range for the event logs ("block" in this case referring to the Ethereum block number):
-```
+```js
 cryptoZombies.getPastEvents("NewZombie", { fromBlock: 0, toBlock: "latest" })
 .then(function(events) {
   // `events` is an array of `event` objects that we can iterate, like we did above
