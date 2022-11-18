@@ -80,7 +80,7 @@ Notes on Solidity & EVM taken while doing [https://cryptozombies.io/en/course/](
 - [RPC](#rpc)
   - [Conventions](#conventions)
 
-</p></details>
+</details>
 
 # State variables
 ```solidity
