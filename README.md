@@ -6,7 +6,7 @@ See README.md for details.
 
 # Solidity Cheat-sheet
 
-Notes on Solidity & EVM taken while doing https://cryptozombies.io/en/course/
+Notes on Solidity & EVM taken while doing [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/)
 <!-- markdown="1" is required for GitHub Pages to render the TOC properly. -->
 
 <details markdown="1" ><summary>Table of Contents</summary>
@@ -262,7 +262,7 @@ require(<necesary_condition_to_continue>) // if true we continue
 import "./someothercontract.sol";
 ```
 
-Extra: Libraries a piece of code that can be called from any contract without the need to deploy it again. https://medium.com/aragondec/library-driven-development-in-solidity-2bebcaf88736
+Extra: Libraries a piece of code that can be called from any contract without the need to deploy it again. [https://medium.com/aragondec/library-driven-development-in-solidity-2bebcaf88736](https://medium.com/aragondec/library-driven-development-in-solidity-2bebcaf88736)
 
 
 # Storage vs Memory
@@ -471,7 +471,7 @@ Questions:
 
 # Web3
 
-https://konghq.com/blog/web3-basics-for-frontend-developers
+[https://konghq.com/blog/web3-basics-for-frontend-developers](https://konghq.com/blog/web3-basics-for-frontend-developers)
 
 
 ```bash
@@ -643,7 +643,7 @@ Ethereum adds a new block every 12seconds. All transactions that are being creat
 The highest gas fee the more likely to be added to next block. (It's the miner decission)
 Miners will try to maximize profits so they will get the most expensive gas transactions.
 
-Amazing website that helps visualize it -> https://txstreet.com/v/eth-btc 
+Amazing website that helps visualize it -> [https://txstreet.com/v/eth-btc](https://txstreet.com/v/eth-btc)
 
 Note:
 If the gas price is too low, the transaction may wait too long in the mempool.
@@ -651,8 +651,9 @@ Therefore, a restriction is in place that invalidates the transaction after 5 mi
 
 
 # MEV
-[MEV EigenPhi Classroom](https://eigenphi-1.gitbook.io/classroom/)
-[How does solana solve MEV](https://chainstack.com/what-is-mev-and-how-does-solana-solves-its-mev-issues/#:~:text=MEV%2C%20or%20%E2%80%9Cmaximal%20extractable%20value,transaction%20ordering%20on%20the%20chain.)
+
+- [MEV EigenPhi Classroom](https://eigenphi-1.gitbook.io/classroom/)
+- [How does solana solve MEV](https://chainstack.com/what-is-mev-and-how-does-solana-solves-its-mev-issues/#:~:text=MEV%2C%20or%20%E2%80%9Cmaximal%20extractable%20value,transaction%20ordering%20on%20the%20chain.)
 
 
 Conceptualized in the following paper from Cornell Tech university. [Flash boys 2.0](https://arxiv.org/abs/1904.05234)
@@ -696,7 +697,7 @@ As the ecosystem comes more competitive the possible return on an opportunity de
 
 This is call **priority gas auction** PGAs
 
-https://docs.flashbots.net/
+[https://docs.flashbots.net/](https://docs.flashbots.net/)
 
 # AMM
 
@@ -720,7 +721,7 @@ Orders you can set:
 - Market order: -> Going on the other side of the order book and buy OR sell.
 - ...
 
-This is how CEX work and some DEX such as https://oasis.app/#earn
+This is how CEX work and some DEX such as [https://oasis.app/](https://oasis.app/)
 
 ## Automated Market Maker
 
@@ -767,7 +768,7 @@ Every transaction instead of Bid and Ask is also called Taker and Maker assets.
 
 # Flashbots
 
-https://docs.flashbots.net/
+[https://docs.flashbots.net/](https://docs.flashbots.net/)
 
 ## Intro
 Flashbots Auction provides a private transaction pool + a sealed bid blockspace auction mechanism which allows block proposers (validators; previously "miners" in PoW) to trustlessly outsource the work of finding optimal block construction.
@@ -786,7 +787,7 @@ Ultimately, the design goals are the following:
 - Complete privacy: implies intermediaries like relays and validators cannot observe the content of transactions until included on chain.
 - Permissionless: implies there are no trusted intermediaries which can censor transactions.
 
-Technical architecture: https://docs.flashbots.net/flashbots-auction/overview#technical-architecture
+Technical architecture: [https://docs.flashbots.net/flashbots-auction/overview#technical-architecture](https://docs.flashbots.net/flashbots-auction/overview#technical-architecture)
 
 
 ## Benefits
