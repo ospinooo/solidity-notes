@@ -754,6 +754,9 @@ Every transacton on the AMM will try to maintain this ratio.
 
 Also, with every transaction you do through AMM you pay a fee that will go to the **liquidity providers**. This incentives people to put liquidity on the fund but this is benefitial because the more liquidity the better is the price. More money more stable price.
 
+Other algorithms:
+- [PMM](https://docs.dodoex.io/english/dodo-academy/pmm-overview/details-about-pmm) by [DODO](https://dodoex.io/)
+
 ### Routing
 
 Even if the Liquidity pair is not given directly. Some AMM can concatenate different liquidity pools doing several transactions over them to give liquidity of that specific token.
