@@ -9,7 +9,7 @@ See README.md for details.
 Notes on Solidity & EVM taken while doing https://cryptozombies.io/en/course/
 <!-- markdown="1" is required for GitHub Pages to render the TOC properly. -->
 
-<details markdown="1" ><summary>Content</summary>
+<details markdown="1" ><summary>Table of Contents</summary>
 
 - [Solidity Cheat-sheet](#solidity-cheat-sheet)
 - [State variables](#state-variables)
