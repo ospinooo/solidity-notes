@@ -929,13 +929,7 @@ if 1k USD = 1 BTC. The investor paid 1k USD but has 1 + X BTC. Being X amount of
 
 Leverage ratio represents the exposure. Normally expressed as 1.5x, 2x, 3x, etc.
 
-$$
-\begin{align}
-
-  {Amount_{borrowed} + Amount_{paid}} \over {Amount_{paid}}
-
-\end{align}
-$$
+$${Amount_{borrowed} + Amount_{paid}} \over {Amount_{paid}}$$
 
 
 ## What does dydx do?
