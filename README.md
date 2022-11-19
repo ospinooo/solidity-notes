@@ -6,7 +6,7 @@ See README.md for details.
 
 # Blockchain personal notes
 
-Personal notes on Solidity, EVM, all around blockchain development. Started with [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/). Please feel free to provide any constructive feedback, always appreciated! :raising-hands:
+Personal notes on Solidity, EVM, all around blockchain development. Started with [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/). Please feel free to provide any constructive feedback, always appreciated! :raised_hands:
 
 <!-- markdown="1" is required for GitHub Pages to render the TOC properly. -->
 
@@ -86,6 +86,12 @@ Personal notes on Solidity, EVM, all around blockchain development. Started with
     - [Creation of shares](#creation-of-shares)
     - [Redemption](#redemption)
     - [ExchangeIssuance](#exchangeissuance)
+  - [dYdX](#dydx)
+    - [Technical decisions](#technical-decisions)
+  - [General knowledge about Margin trading](#general-knowledge-about-margin-trading)
+    - [Leverage longs.](#leverage-longs)
+    - [Leverage ratio](#leverage-ratio)
+  - [What does dydx do?](#what-does-dydx-do)
 
 </details>
 
@@ -855,7 +861,7 @@ Creation of a new Set.
 
 Create set tokens for a Set Index contract. (Creation of shares.)
 
-![](img/setprotocol-creation.png)
+![](img/setprotocol-creation1.png)
 ![](img/setprotocol-creation2.png)
 
 ### Redemption 
@@ -872,3 +878,93 @@ This process requires the user to provide exactly the tokens that the index has.
 
 
 ![](img/setprotocol-exchangeissueance.png)
+
+
+
+## dYdX
+
+[Whitepaper](download.pdf)
+
+Enable more complex investment vehicles such as shorts, options, futures.. etc in the blockchain. Margin trading.
+
+### Technical decisions
+
+**DEX**:
+
+> dYdX uses Decentralized Exchange for liquidity settlement. There are several types. Orderbook, AMM, state channel, Hybrid? Which one to use? The 0x whitepaper offers an in-depth discussion of the tradeoffs between these models . We chose to base dYdX on the hybrid approach pioneered by 0x, as we believe it allows creation of the most efficient markets.
+
+**Oracles:**
+> Using oracles for prices like Verocity? The limitations on frequency, latency, and cost of price updates due to the nature of blockchains makes it impossible to create markets as efficient as those built on traditional centralized exchanges.
+
+## General knowledge about Margin trading
+
+![](img/dydx-margin.png)
+
+Margin trade is a trade in which you borrow an asset to immediately trade it for another. Since its borrow this must be paid with interests. Examples of this are Leveraged Longs and shorts.
+
+Think of base asset like BTC and quote like USD
+
+- Shorts: **borrow base asset** and trade with quote asset immediately in the market.
+- Longs: **borrow quote asset** and trade with base asset in the market.
+
+Base asset is the one we will monitor in both cases.
+- Shorts: **Good if base asset goes down in (quote) value**. We will buy base asset back and pay lender back the base amount making profit.
+- Longs: **Good if base asset goes up in (quote) value**. Good, we will sell base asset for quote and pay lender back quote asset amount making profit.
+
+1. How do we assure margin trades are safe? they are being paid back. We have **collateral**.
+2. How do we assure collateral is enough to cover losses?. We liquidate the **margin position**
+
+### Leverage longs.
+
+Tipically used to increase exposure to the price of a base asset. 
+
+1. We buy BTC 
+2. Use it as collateral to borrow more USD
+3. Use this USD to buy more BTC.
+
+if 1k USD = 1 BTC. The investor paid 1k USD but has 1 + X BTC. Being X amount of BTC borrowed.
+### Leverage ratio
+
+Leverage ratio represents the exposure. Normally expressed as 1.5x, 2x, 3x, etc.
+
+$$
+{Amount_{borrowed} + Amount_{paid}} \over {Amount_{paid}}
+$$
+
+
+## What does dydx do?
+
+Enables an interface that handles borrows/lending for marginal trades in the blockchain. It uses 0x protocol for BUY/SELLs trading and holds the assets inside.
+
+- Investor can open margin positions on shorts and leveraged depending on which token is borrowed.
+- Lender can request back position this will buy Investor some time to close it.
+- Investor can approve other smart contracts to close the position.
+
+Concepts:
+- Owed token. the one borrowed. 
+- Held token. the one being held in the position.
+
+Protocol allowes.
+
+Open positions (Deposit to open):
+- In Owed token. This will borrow more and trade it with it to get held token.
+- In Held token. This will borrow owed and trade only that to get the held token.
+
+Close positions (Payout to trader):
+- In Owed token. This will trade ALL held by owed, pay lender and give rest to investor.
+- In Held token. This will trade ONLY part held by cover all owed and payout rest held amount to trader.
+
+How do we map Owed and Held tokens into Margin trades?
+
+Shorts
+- Owed => Base
+- Held => Quote
+
+> For example: We want to short BTC-USD (Base-quote). We borrow BTC as sell it by USD. We hold USD which is the quote and we owe BTC which is the base. Once we close we buy back our Held token by Owed, give back to lender and have profit/loss.
+
+Leveraged Longs
+- Owed => Quote
+- Held => Base
+
+> For example: We want to long BTC-USD (Base-quote). We borrow USD and buy BTC with it. We hold BTC which is the base and we owe USD which is the quote. Once we close we sell our BTC by USD, pay the loan and have profit/loss.
+
