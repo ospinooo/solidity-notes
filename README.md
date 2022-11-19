@@ -862,6 +862,8 @@ Creation of a new Set.
 Create set tokens for a Set Index contract. (Creation of shares.)
 
 ![](img/setprotocol-creation1.png)
+
+
 ![](img/setprotocol-creation2.png)
 
 ### Redemption 
