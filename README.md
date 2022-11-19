@@ -79,6 +79,11 @@ Notes on Solidity & EVM taken while doing [https://cryptozombies.io/en/course/](
   - [Benefits](#benefits)
 - [RPC](#rpc)
   - [Conventions](#conventions)
+- [Interesting Protocols](#interesting-protocols)
+  - [Set protocol.](#set-protocol)
+    - [Creation of Set index](#creation-of-set-index)
+    - [Creation of shares](#creation-of-shares)
+    - [Redemption](#redemption)
 
 </details>
 
@@ -667,7 +672,7 @@ How to change order on transactions? Gas fee. Higher gas transactions go first.
 
 - **Sandwich MEV** [link](https://eigenphi-1.gitbook.io/classroom/mev-types/sandwich-mev)
 
-![](sandwich.png)
+![](img/sandwich.png)
 
 - **Frontrunning**: is an attack where the third party attempts to intercept a large transaction 
   - I see somebody is trying to do an arbitrage getting 5% for free. I can copy same transaction and place it with higher gas fee into the transaction pool. (This will make mine being added.)
@@ -814,3 +819,45 @@ Two key data types get passed over JSON: unformatted byte arrays and quantities.
 
 - Quantities encoded as hexadecimal. 0x0, 0x41, ...
 - Unformatted data (byte arrays, account addresses, hashes, bytecode arrays): encode as hex, prefix with "0x", two hex digits per byte.
+
+
+
+# Interesting Protocols 
+
+## Set protocol.
+
+[Whitepaper](setprotocol_whitepaper.pdf)
+
+- Make easy handle basket of tokens / index funds.
+
+Benefits.
+- **Easy to use**. No hustle managing a basket of tokens. You buy a Set token that will be representing combination of the underlyings.
+- **Save gas!**. You don't need to handle the underlying's rebalance.
+- Value of a Set token is expected to be the sum up of the underlying values.
+- **No counter-party risk**. Because a trustless, autonomous smart contract
+holds custody to the underlying tokens, there is no third party that can fail to live up to its contractual
+agreements (like ETFs). In this case we have the smart contract security risk.
+
+In Set we have the following participants:
+- Creators (ETF Issuers)
+- Users (AP)
+- Traders (Market markets that maintain Set token in the most representative price doing arbitrage).
+
+### Creation of Set index
+
+Creation of a new Set.
+
+![](img/setprotocol-createSet.png)
+
+### Creation of shares
+
+Create set tokens for a Set Index contract. (Creation of shares.)
+
+![](img/setprotocol-creation.png)
+![](img/setprotocol-creation2.png)
+
+### Redemption 
+
+Redeem set tokens for a Set Index contract. (Redemption of shares)
+
+![](img/setprotocol-redemption.png)
