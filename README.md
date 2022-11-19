@@ -4,14 +4,15 @@ Prefer only GitHub-flavored Markdown in external text.
 See README.md for details.
 -->
 
-# Solidity Cheat-sheet
+# Blockchain personal notes
 
-Notes on Solidity & EVM taken while doing [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/)
+Personal notes on Solidity, EVM, all around blockchain development. Started with [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/). Please feel free to provide any constructive feedback, always appreciated! :raising-hands:
+
 <!-- markdown="1" is required for GitHub Pages to render the TOC properly. -->
 
 <details markdown="1" ><summary>Table of Contents</summary>
 
-- [Solidity Cheat-sheet](#solidity-cheat-sheet)
+- [Blockchain personal notes](#blockchain-personal-notes)
 - [State variables](#state-variables)
   - [Mapping](#mapping)
   - [Address](#address)
