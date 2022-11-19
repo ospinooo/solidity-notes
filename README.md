@@ -84,6 +84,7 @@ Notes on Solidity & EVM taken while doing [https://cryptozombies.io/en/course/](
     - [Creation of Set index](#creation-of-set-index)
     - [Creation of shares](#creation-of-shares)
     - [Redemption](#redemption)
+    - [ExchangeIssuance](#exchangeissuance)
 
 </details>
 
@@ -861,3 +862,12 @@ Create set tokens for a Set Index contract. (Creation of shares.)
 Redeem set tokens for a Set Index contract. (Redemption of shares)
 
 ![](img/setprotocol-redemption.png)
+
+
+
+### ExchangeIssuance
+
+This process requires the user to provide exactly the tokens that the index has. However, what happens if the index is represented by 100 tokens and we want to make it easy for user to issue new set token of this index? Set protocol has this module that accept a base asset like ETH or DAI and will exchange it for you using dex protocols such as 0x protocol.
+
+
+![](img/setprotocol-exchangeissueance.png)
