@@ -88,10 +88,10 @@ Personal notes on Solidity, EVM, all around blockchain development. Started with
     - [ExchangeIssuance](#exchangeissuance)
   - [dYdX](#dydx)
     - [Technical decisions](#technical-decisions)
-  - [General knowledge about Margin trading](#general-knowledge-about-margin-trading)
-    - [Leverage longs.](#leverage-longs)
-    - [Leverage ratio](#leverage-ratio)
-  - [What does dydx do?](#what-does-dydx-do)
+    - [General knowledge about Margin trading](#general-knowledge-about-margin-trading)
+      - [Leverage longs.](#leverage-longs)
+      - [Leverage ratio](#leverage-ratio)
+    - [What does dydx do?](#what-does-dydx-do)
   - [0x protocol](#0x-protocol)
     - [Relayer](#relayer)
     - [DAO](#dao)
@@ -901,7 +901,7 @@ Enable more complex investment vehicles such as shorts, options, futures.. etc i
 **Oracles:**
 > Using oracles for prices like Verocity? The limitations on frequency, latency, and cost of price updates due to the nature of blockchains makes it impossible to create markets as efficient as those built on traditional centralized exchanges.
 
-## General knowledge about Margin trading
+### General knowledge about Margin trading
 
 ![](img/dydx-margin.png)
 
@@ -919,7 +919,7 @@ Base asset is the one we will monitor in both cases.
 1. How do we assure margin trades are safe? they are being paid back. We have **collateral**.
 2. How do we assure collateral is enough to cover losses?. We liquidate the **margin position**
 
-### Leverage longs.
+#### Leverage longs.
 
 Tipically used to increase exposure to the price of a base asset. 
 
@@ -928,7 +928,7 @@ Tipically used to increase exposure to the price of a base asset.
 3. Use this USD to buy more BTC.
 
 if 1k USD = 1 BTC. The investor paid 1k USD but has 1 + X BTC. Being X amount of BTC borrowed.
-### Leverage ratio
+#### Leverage ratio
 
 Leverage ratio represents the exposure. Normally expressed as 1.5x, 2x, 3x, etc.
 
@@ -937,7 +937,7 @@ Leverage ratio represents the exposure. Normally expressed as 1.5x, 2x, 3x, etc.
 ```
 
 
-## What does dydx do?
+### What does dydx do?
 
 Enables an interface that handles borrows/lending for marginal trades in the blockchain. It uses 0x protocol for BUY/SELLs trading and holds the assets inside.
 
