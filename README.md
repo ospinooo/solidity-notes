@@ -6,7 +6,7 @@ See README.md for details.
 
 # Blockchain personal notes
 
-Personal notes on Solidity, EVM, all around blockchain development. Started with [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/). Please feel free to provide any constructive feedback, always appreciated! :raised_hands:
+Personal notes on Solidity, EVM, all around blockchain development. Started with [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/). Intended to track concepts and help anyone to get started into the space!. Please, feel free to provide any constructive feedback, always appreciated! :raised_hands:
 
 <!-- markdown="1" is required for GitHub Pages to render the TOC properly. -->
 
@@ -92,6 +92,9 @@ Personal notes on Solidity, EVM, all around blockchain development. Started with
     - [Leverage longs.](#leverage-longs)
     - [Leverage ratio](#leverage-ratio)
   - [What does dydx do?](#what-does-dydx-do)
+  - [0x protocol](#0x-protocol)
+    - [Relayer](#relayer)
+    - [DAO](#dao)
 
 </details>
 
@@ -834,7 +837,7 @@ Two key data types get passed over JSON: unformatted byte arrays and quantities.
 
 ## Set protocol.
 
-[Whitepaper](setprotocol_whitepaper.pdf)
+[Whitepaper](pdfs/setprotocol_whitepaper.pdf)
 
 - Make easy handle basket of tokens / index funds.
 
@@ -885,7 +888,7 @@ This process requires the user to provide exactly the tokens that the index has.
 
 ## dYdX
 
-[Whitepaper](download.pdf)
+[Whitepaper](pdfs/dydx_whitepaper.pdf)
 
 Enable more complex investment vehicles such as shorts, options, futures.. etc in the blockchain. Margin trading.
 
@@ -969,4 +972,52 @@ Leveraged Longs
 - Held => Base
 
 > For example: We want to long BTC-USD (Base-quote). We borrow USD and buy BTC with it. We hold BTC which is the base and we owe USD which is the quote. Once we close we sell our BTC by USD, pay the loan and have profit/loss.
+
+## 0x protocol
+
+[Whitepaper](pdfs/0x_whitepaper.pdf)
+
+Summary:
+- blockchain: technology enables transfer of tokens/value p2p permissionless trustless etc.
+- exchange: platform that enables finding liquidity easy for exchanges of tokens. (CLOB, AMM, etc).
+  - Decentralized gives security guarantees.
+  - No central party to trust. Can be hack, runaway with your funds, lose your funds etc.
+  - Current state of DEXs: scattered liquidity around all the ecosystem, desrtoying valuable network effects around liquidity.
+
+Solution: 0x is an open protocol. Intention as basic building block that will be combined with other protocols to create interesting dApps.
+
+![](img/0x-solution.png)
+
+Problems with DEXs.
+
+- **on-chain order book**: transactions for every action, spending gas, consuming network with no real value transfer. Market makers were spend gas with post, modify and cancel orders.
+- **Automated market makers**: proposed as alternative. Benefit is availability always counterparty to trade. Cheap to trade, there is no orders just an algorithm. However, normally a worse price that you can find in CLOB. Algorithm creates a supply problem. If price-adjustment is too sensitive even small trades produce large fluctuations on the spot trades. Depends on the TVL of the liquidity pool you want to trade in.
+- **State channels**: scaling solution that moves transactions off of the blockchain. Participants pass signed messages back and forth, only publishing when channel is closed. However, this requires participants to be online while channel open. Security risks like dishonest counterparty and DDOS attacks are possible here as well.
+- **Hybrid implementation**:  off-chain order relay with on-chain settlement. Efficiency of state channels with near instant settlement that reduces hacks/attacks. Reduced costs for MM only pay gas on settlement.
+
+0x protocol goes with Hybrid and making it application agnostic so any exchange can interact with the protocol.
+
+### Relayer
+
+TLDR: Host and maintain an order book.
+
+- An **exchange** must build and operate proprietary infrastructure, execute trades and handle user funds. Relayers merely facilitate signalling between market participants by hosting and propagating an order book that consists of generic messages.
+
+- Takers look at the orders books and execute the trades not the relayers.
+
+
+![](img/0x-relayer.png)
+
+### DAO
+
+Continuous integration by a DAO that votes for updates. Votes are done via ZRX token.
+
+ZRX token utility:
+- Relayers get paid in this token. Incentivize them to do this work .
+
+![](img/0x-dao.png)
+
+Summary of 0x protocol.
+
+![](img/0x-summary.png)
 
