@@ -4,15 +4,15 @@ Prefer only GitHub-flavored Markdown in external text.
 See README.md for details.
 -->
 
-# Blockchain personal notes
+# Blockchain personal notes ✍️
 
-Personal notes on Solidity, EVM, all around blockchain development. Started with [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/). Intended to track concepts and help anyone to get started into the space!. Please, feel free to provide any constructive feedback, always appreciated! :raised_hands:
+Personal notes on Solidity, EVM, all around blockchain development. Started with [https://cryptozombies.io/en/course/](https://cryptozombies.io/en/course/). Intended to track concepts and help anyone to get started into the space!. Please, feel free to provide any constructive feedback, always appreciated! 🙌
 
 <!-- markdown="1" is required for GitHub Pages to render the TOC properly. -->
 
 <details markdown="1" ><summary>Table of Contents</summary>
 
-- [Blockchain personal notes](#blockchain-personal-notes)
+- [Blockchain personal notes ✍️](#blockchain-personal-notes-️)
 - [State variables](#state-variables)
   - [Mapping](#mapping)
   - [Address](#address)
