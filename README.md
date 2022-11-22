@@ -832,6 +832,50 @@ Two key data types get passed over JSON: unformatted byte arrays and quantities.
 - Unformatted data (byte arrays, account addresses, hashes, bytecode arrays): encode as hex, prefix with "0x", two hex digits per byte.
 
 
+# Multi signature
+
+Smart contract used for sharing ownership and control over funds.
+
+This storage method is often used by companies, organizations, and partners. The reason such smart contracts are called ‘multisigs’ is because multiple signatures from different addresses are needed for a transaction to be executed.
+
+- Security against hacked keys. (One key cannot approve transaction)
+- Security against lost keys. (A set percentage needs to be approve to transaction, one lost key doesnt impact).
+
+Problem when
+- Percentage threshold of keys stolen
+- Percentage threshold of keys lost
+
+# Deployments of Smart contracts
+
+Smart contracts and blockchain solve the problem of ownership. Who owns what at this moment and which was the ownership of this.
+
+- State contracts. Save ownership state.
+- Stateless contracts. Calculations, Algorithms etc.
+
+![](img/arch-coordinator.png)
+
+What happens if we want to deploy more code?
+
+State contracts don't change! But we can deploy new features, bugs etc.
+
+![](img/arch-new-deploy.png)
+
+
+Let's have a look at some code.
+
+![](img/arch-code.png)
+
+
+Who is the caller to the state contracts? Do we have them in msg.sender?
+
+- When coordinator is calling the state contracts.
+  - msg.sender will be the coordinator in the state contracts functions.
+  - msg.sender will be the external caller in the coordinator functions.
+
+msg.sender changes from contract to contract call.
+
+![](img/msg-sender.png)
+
 
 # Interesting Protocols 
 
