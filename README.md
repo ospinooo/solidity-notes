@@ -877,6 +877,57 @@ msg.sender changes from contract to contract call.
 ![](img/msg-sender.png)
 
 
+# Randomness
+
+Important for every NFT game.
+
+## 1 Solution obscure
+
+Obscure smart contract not verified with code. This can be exploitable since you can reverse engineer the bytecode.
+
+## 2 Solution use parameters as randomness.
+
+Parameters:
+- Block Number
+- Block Time
+- NFT ID
+
+Attackers can predict the next transaction
+- For example when NFTs are minted. I might know that the NFT with id 90 is a good NFT with extra properties.
+- What will I do in this case?
+  - See all the current transactions and predicts when the number 90 is minted.
+  - Once its time I create a transcaction with high gas to make sure I am the first one executing it.
+  - Result: I have te NFT number 90.
+
+Problem of this: Not random at all.
+
+## 3 Solution for randomness
+
+### Trusted service (your own service)
+
+The outcome is decided off-chain (Outside of the Chain). Externally from the blockchain. You have a service that calls your smart contract.
+
+![](img/randomness.png)
+
+Trusted service calls the smart contract function with a truly random number.
+
+### Trusted service (chainlink)
+
+Chainlink: VRF
+
+Resolve situations.
+
+2 step process
+1. Smart Contract: Can you give me a random number?
+2. Chainlink: Call your function with the random number. In the next block.
+
+[https://docs.chain.link/vrf/v2/introduction](https://docs.chain.link/vrf/v2/introduction)
+
+## Example
+### Example: Axie infinite
+
+They created their own blockchain so for randomness are paid to itself gas is paid in their native token.
+
 # Interesting Protocols 
 
 ## Set protocol.
