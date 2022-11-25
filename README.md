@@ -63,6 +63,12 @@ Personal notes on Solidity, EVM, all around blockchain development. Started with
   - [Indexed](#indexed)
     - [Past events](#past-events)
     - [Events as storage!](#events-as-storage)
+- [Inheritance](#inheritance-1)
+- [Oracles](#oracles)
+  - [Chainlink](#chainlink)
+  - [Solidity](#solidity)
+  - [Basic request model](#basic-request-model)
+    - [Implementation](#implementation)
 - [On-chain vs Off-chain](#on-chain-vs-off-chain)
 - [Mempool](#mempool)
 - [MEV](#mev)
@@ -80,6 +86,18 @@ Personal notes on Solidity, EVM, all around blockchain development. Started with
   - [Benefits](#benefits)
 - [RPC](#rpc)
   - [Conventions](#conventions)
+- [Multi signature](#multi-signature)
+- [Deployments of Smart contracts](#deployments-of-smart-contracts)
+- [Randomness](#randomness)
+  - [1 Solution obscure](#1-solution-obscure)
+  - [2 Solution use parameters as randomness.](#2-solution-use-parameters-as-randomness)
+  - [3 Solution for randomness](#3-solution-for-randomness)
+    - [Trusted service (your own service)](#trusted-service-your-own-service)
+    - [Trusted service (chainlink)](#trusted-service-chainlink)
+  - [Example](#example)
+    - [Example: Axie infinite](#example-axie-infinite)
+- [Grade of descentralization](#grade-of-descentralization)
+- [NFT](#nft)
 - [Interesting Protocols](#interesting-protocols)
   - [Set protocol.](#set-protocol)
     - [Creation of Set index](#creation-of-set-index)
@@ -635,6 +653,87 @@ Because you can use this method to query the event logs since the beginning of t
 **The tradeoff here is that events are not readable from inside the smart contract itself**. But it's an important use-case to keep in mind if you have some data you want to be historically recorded on the blockchain so you can read it from your app's front-end.
 
 > Interesting ideas for DDD and Event Sourcing
+
+# Inheritance 
+
+Call the parent's constructor in the child constructor signature.
+
+```solidity
+contract person {
+  constructor (uint age)
+}
+
+contract child is person {
+  constructor () person(5) {}
+}
+```
+
+
+# Oracles
+
+Blockchain oracles are devices that connect our smart contracts with data and computation from the real world such as pricing data and currencies, random number generators and any other data we can think of.
+
+Blockchain is isolated, cannot connect by default to the real world.
+
+
+Smart contracts are built for decentralization then we need to find a decentralized version of getting trusted data from outside of the blockchain.
+- A third party is centralized
+- If you give data this is still centralized
+
+DON: Decentralized oracle network.
+
+## Chainlink
+
+Chainlink is a framework for decentralized oracle networks. The DON aggregates data and places it on the blockchain in a `smart contract`. All we need to do is read from a contract that Chainlink network is constantly updating for us. 
+
+This are called `datafeeds` and they become even cheaper than running a centralized oracle. Consensus is achieved with Off-chain reporting is the system that chainlink uses to reach off-chain consensus.
+
+
+## Solidity
+
+Import the interface:
+```solidity
+@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol
+```
+
+## Basic request model
+
+This model is used in the generation of random numbers. Blockchains are deterministic, there is no randomnes inside them so we need to take it from outside of the blockchain Oracle. However, this is not like a price of an asset will be the same for everyone. Here we are requesting a unique random number.
+
+Process
+1. Callee contract makes a request in a transaction
+2. Callee contract or oracle contract emits an event
+3. Chainlink node (Off-chain) is listening for the event, where the details of the request are logged in the event
+4. In a second transaction created by the Chainlink node, it returns the data on-chain by calling a function described by the callee contract
+5. In the case of the Chainlink VRF, a randomness proof is done to ensure the number is truly random
+
+Every time we request we pay fees in LINK.
+
+
+### Implementation
+
+- The address of the Chainlink token contract. This is needed so our contract can tell if we have enough LINK tokens to pay for the gas.
+- The VRF coordinator contract address. This is needed to verify that the number we get is actually random.
+- The Chainlink node keyhash. This is used identify which Chainlink node we want to work with.
+- The Chainlink node fee. This represents the fee (gas) the Chainlink will charge us, expressed in LINK tokens.
+
+Code:
+- requestRandomness(keyHash, fee). Function that calls VRF Chainlink coordinator
+- fulfillRandomness(requestId, randomness). `internal override`. (Only chainlink coordinator can call it)
+
+randomness is the random number we requested.
+
+```solidity
+function getRandomNumber() public returns (bytes32 requestId) {
+    return requestRandomness(keyHash, fee);
+}
+
+function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
+    randomResult = randomness;
+}
+```
+
+
 
 
 # On-chain vs Off-chain
