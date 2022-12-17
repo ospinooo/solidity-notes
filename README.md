@@ -671,20 +671,22 @@ contract child is person {
 
 # Oracles
 
+Blockchain is isolated, cannot connect by default to the real world. For getting data from the real world we use Oracles.
+
 Blockchain oracles are devices that connect our smart contracts with data and computation from the real world such as pricing data and currencies, random number generators and any other data we can think of.
 
-Blockchain is isolated, cannot connect by default to the real world.
 
+Other ways of getting data?
+- Get data from a trusted third party. centralized
+- The creator gives the data. centralized
 
 Smart contracts are built for decentralization then we need to find a decentralized version of getting trusted data from outside of the blockchain.
-- A third party is centralized
-- If you give data this is still centralized
 
 DON: Decentralized oracle network.
 
 ## Chainlink
 
-Chainlink is a framework for decentralized oracle networks. The DON aggregates data and places it on the blockchain in a `smart contract`. All we need to do is read from a contract that Chainlink network is constantly updating for us. 
+Chainlink is a framework for decentralized oracle networks. The DON aggregates data and places it on the blockchain in a `smart contract`. All we need to do is read from a contract that Chainlink network is constantly updating for us.
 
 This are called `datafeeds` and they become even cheaper than running a centralized oracle. Consensus is achieved with Off-chain reporting is the system that chainlink uses to reach off-chain consensus.
 
